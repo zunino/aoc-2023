@@ -1,5 +1,9 @@
-d01: d01.o
+clean:
+	rm -f d[0-9][0-9]
+	rm -f *.o
+
+%: %.o
 	gcc -Wall -o $@ $?
 
-d01.o: d01.c
-	gcc -c -Wall -o $@ $?
+%.o: %.c
+	gcc -c -g -Wall -o $@ $?
