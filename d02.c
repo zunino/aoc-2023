@@ -74,7 +74,7 @@ bool is_game_possible(const Game *game) {
     return true;
 }
 
-int id_sum_of_possible_games() {
+int part_1_id_sum_of_possible_games() {
     FILE *fp = fopen("data/d02.txt", "r");
 
     int id_sum = 0;
@@ -90,6 +90,37 @@ int id_sum_of_possible_games() {
     return id_sum;
 }
 
+CubeSet minimum_set_in_bag_for_game(const Game *game) {
+    CubeSet minimum_set = {0};
+    for (int i = 0; i < game->n_sets; ++i) {
+        CubeSet set = game->sets[i];
+        if (set.red > minimum_set.red) minimum_set.red = set.red;
+        if (set.green > minimum_set.green) minimum_set.green = set.green;
+        if (set.blue > minimum_set.blue) minimum_set.blue = set.blue;
+    }
+    return minimum_set;
+}
+
+int power_of_cube_set(const CubeSet set) {
+    return set.red * set.green * set.blue;
+}
+
+int part_2_sum_of_power_of_minimum_sets() {
+    FILE *fp = fopen("data/d02.txt", "r");
+
+    int power_sum = 0;
+    char buffer[LINE_BUFFER_SIZE];
+    while (fgets(buffer, LINE_BUFFER_SIZE, fp) != NULL) {
+        Game game = parse_game(buffer);
+        CubeSet min_set = minimum_set_in_bag_for_game(&game);
+        power_sum += power_of_cube_set(min_set);
+    }
+
+    fclose(fp);
+    return power_sum;
+}
+
 int main(void) {
-    printf("Day 2 - part 1: %d\n", id_sum_of_possible_games());
+    printf("Day 2 - part 1: %d\n", part_1_id_sum_of_possible_games());
+    printf("Day 2 - part 2: %d\n", part_2_sum_of_power_of_minimum_sets());
 }
