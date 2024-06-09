@@ -9,4 +9,7 @@ d%.o: d%.c
 	gcc -c -g -Wall -o $@ $?
 
 d04: d04.rs
-	rustc $?
+	rustc $<
+
+d05: d05.go
+	go build -gcflags=all="-N -l" -ldflags=-w $<
