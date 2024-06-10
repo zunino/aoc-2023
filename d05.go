@@ -46,27 +46,20 @@ func readMapData() (Seeds, []RangeMap) {
 
 	// parse maps
 	var rangeMaps []RangeMap
-	var currRangeMap *RangeMap
 	for scanner.Scan() {
 		line := scanner.Text()
 		if len(strings.Trim(line, " ")) == 0 {
-			if currRangeMap != nil {
-				rangeMaps = append(rangeMaps, *currRangeMap)
-				currRangeMap = nil
-			}
 			continue
 		}
 		if !(line[0] >= '0' && line[0] <= '9') {
-			currRangeMap = &RangeMap{}
+            rangeMaps = append(rangeMaps, RangeMap{})
 		} else {
 			parts := strings.Split(line, " ")
 			nums := grabInts(parts)
 			mapEntry := MapEntry{dstStart: nums[0], srcStart: nums[1], length: nums[2]}
-			*currRangeMap = append(*currRangeMap, mapEntry)
+            lastRangeMap := &rangeMaps[len(rangeMaps)-1]
+			*lastRangeMap = append(*lastRangeMap, mapEntry)
 		}
-	}
-	if currRangeMap != nil {
-		rangeMaps = append(rangeMaps, *currRangeMap)
 	}
 
 	return seeds, rangeMaps
